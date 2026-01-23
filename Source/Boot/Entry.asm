@@ -1,0 +1,105 @@
+; entry.asm
+; Crated by Matheus Leme Da Silva
+BITS 16
+SECTION .text.entry
+EXTERN Main
+
+GLOBAL _START
+_START:
+	CLI
+	XOR AX, AX
+	MOV DS, AX
+	MOV ES, AX
+	MOV SS, AX
+	MOV SP, 0xFFFF
+	STI
+
+	MOV [BootDrive], DL
+
+	; Enable A20 line
+	IN AL, 0x92
+	OR AL, 2
+	OUT 0x92, AL
+
+	; Load GDT
+	CLI
+	LGDT [GDTR]
+
+	; Enter in protected mode
+	MOV EAX, CR0
+	OR EAX, 1
+	MOV CR0, EAX
+
+	JMP 0x08:_START32
+
+HANG:
+	JMP HANG
+
+GLOBAL _START32
+BITS 32
+_START32:
+	MOV AX, 0x10
+	MOV DS, AX
+	MOV ES, AX
+	MOV SS, AX
+	MOV ESP, STACK_TOP
+
+	CALL Main
+
+HANG32:
+	JMP HANG32
+
+SECTION .data
+GLOBAL BootDrive
+BootDrive: DB 0
+
+GDTR:
+	.SIZE: DW GDT_END - GDT - 1
+	.BASE: DD GDT
+
+GDT:
+	; NULL
+	DW 0
+	DW 0
+	DB 0
+	DB 0
+	DB 0
+	DB 0
+
+	; CODE32
+	DW 0xffff
+	DW 0
+	DB 0
+	DB 0b10011010
+	DB 0b11001111
+	DB 0
+
+	; DATA32
+	DW 0xffff
+	DW 0
+	DB 0
+	DB 0b10010010
+	DB 0b11001111
+	DB 0
+
+	; CODE16
+	DW 0xffff
+	DW 0
+	DB 0
+	DB 0b10011010
+	DB 0b00001111
+	DB 0
+
+	; DATA16
+	DW 0xffff
+	DW 0
+	DB 0
+	DB 0b10010010
+	DB 0b00001111
+	DB 0
+GDT_END:
+
+SECTION .bss
+STACK_BOTTOM:
+	RESB 8192
+STACK_TOP:
