@@ -39,7 +39,7 @@ IMAGEROOT := $(BUILDDIR)/IMGROOT
 
 $(IMAGEROOT):
 	mkdir -p $@
-	touch $@/KERNEL.SYS
+	echo "Hello kernel!\r\n" > $@/KERNEL.TXT
 
 $(IMAGE): $(BOOTLOADER) $(IMAGEROOT)
 	mkdir -p $(dir $@)

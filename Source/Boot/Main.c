@@ -19,6 +19,7 @@ struct MbrPart {
 U8 Mbr[512];
 struct MbrPart *PartTable = (struct MbrPart *)&Mbr[446];
 int part = 0;
+void FilenameToFatname(char *filename, char *out);
 
 // The Main function don't return
 void Main(void) {
@@ -37,10 +38,23 @@ void Main(void) {
       part = i;
   }
 
-  if (FatInit(BootDrive, PartTable[part].StartLBA) != 0) {
+  struct FatPart p;
+  if (FatInit(BootDrive, PartTable[part].StartLBA, &p) != 0) {
     Puts("Failed to initialize partition\r\n");
     Panic();
   }
+
+#define FILEPATH "/kernel.txt"
+
+  struct FatDirEntry e;
+  if (FatFind(p, FILEPATH, &e) != 0)
+    Puts("File" FILEPATH " not found!\r\n");
+  else
+    Puts("File " FILEPATH " found!\r\n");
+
+  Puts("Cluster : 0x");
+  PutHexU16(e.ClstLo);
+  Puts("\r\n");
 
   for (;;)
     ;

@@ -77,7 +77,11 @@ struct FatPart {
 #define PART_FAT12 1
 #define PART_FAT16 2
 
-int FatInit(U8 drive, U32 StartLBA);
+int FatInit(U8 drive, U32 StartLBA, struct FatPart *out);
+int FatFindInDir(struct FatPart p, U16 clst, struct FatDirEntry *out,
+                 char *filename);
+int FatFind(struct FatPart p, const char *path, struct FatDirEntry *out);
+
 void FilenameToFatname(char *filename, char *out);
 
 #endif // FAT_H

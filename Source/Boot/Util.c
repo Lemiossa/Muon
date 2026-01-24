@@ -97,3 +97,31 @@ void DiskRead(U8 drive, U32 lba, void *buffer) {
     Panic();
   }
 }
+
+// Get path part
+// Returns non zero if have error
+int GetPathPart(const char *path, char *out, U32 part, U32 outMax) {
+  if (!path || !out || outMax == 0)
+    return 1;
+
+  if (path[0] == '/')
+    path++;
+
+  while (*path && part > 0) {
+    if (*path == '/')
+      part--;
+    path++;
+  }
+
+  if (*path == 0)
+    return 1;
+
+  for (U32 i = 0; i < outMax; i++) {
+    char c = path[i];
+    if (c == '/' || c == 0)
+      break;
+    out[i] = c;
+  }
+
+  return 0;
+}

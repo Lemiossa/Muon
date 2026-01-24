@@ -21,5 +21,6 @@ void PutHexU16(U16 w);
 void PutHexU32(U32 dw);
 void Panic(void);
 void DiskRead(U8 drive, U32 lba, void *buffer);
+int GetPathPart(const char *path, char *out, U32 part, U32 outMax);
 
 #endif // UTIL_H

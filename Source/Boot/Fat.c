@@ -4,7 +4,6 @@
  */
 #include "Fat.h"
 #include "Util.h"
-#include "Vga.h"
 
 // Returns 1 if cluster is end
 int FatClstIsEnd(struct FatPart p, U16 clst) {
@@ -75,9 +74,9 @@ void FilenameToFatname(char *filename, char *out) {
   }
 }
 
-// Initializes a FAT partition
-// Returns non zero if have error
-int FatInit(U8 drive, U32 StartLBA) {
+// Initializes a FAT partition;
+// Returns non zero if have error;
+int FatInit(U8 drive, U32 StartLBA, struct FatPart *out) {
   struct FatPart p;
 
   U8 vbr[SCT_SIZE];
@@ -111,6 +110,9 @@ int FatInit(U8 drive, U32 StartLBA) {
     p.GFatType = PART_FAT16;
   }
 
+  if (out)
+    *out = p;
+
   return 0;
 }
 
@@ -140,9 +142,9 @@ U16 FatNextClst(struct FatPart part, U16 clst) {
   return val;
 }
 
-// Find Dir entry in a directory
-// Returns non zero if have error
-// If clst is zero and FAT is 12/16, reads in root directory
+// Find Dir entry in a directory;
+// Returns non zero if have error;
+// If clst is zero and FAT is 12/16, reads in root directory;
 int FatFindInDir(struct FatPart p, U16 clst, struct FatDirEntry *out,
                  char *filename) {
   if (!filename)
@@ -180,4 +182,33 @@ int FatFindInDir(struct FatPart p, U16 clst, struct FatDirEntry *out,
   }
 
   return 1;
+}
+
+// Find a entry with complete PATH;
+// Returns non zero if have error;
+int FatFind(struct FatPart p, const char *path, struct FatDirEntry *out) {
+  if (!path)
+    return 1;
+
+  struct FatDirEntry entry;
+  U16 curClst = 0;
+  U32 part = 0;
+  while (1) {
+    char filename[11];
+    if (GetPathPart(path, filename, part++, 11) != 0)
+      break;
+
+    if (FatFindInDir(p, curClst, &entry, filename) != 0)
+      return 1;
+
+    if (entry.Attr & ARCHIVE)
+      break;
+
+    curClst = entry.ClstLo;
+  }
+
+  if (out)
+    *out = entry;
+
+  return 0;
 }
