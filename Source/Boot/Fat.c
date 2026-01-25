@@ -5,7 +5,6 @@
 #include "Fat.h"
 #include "MemDefs.h"
 #include "Util.h"
-#include "Vga.h"
 
 // Returns 1 if cluster is end
 int FatClstIsEnd(struct FatPart p, U32 clst) {
@@ -212,7 +211,7 @@ int FatFind(struct FatPart p, const char *path, struct FatDirEntry *out) {
 	if (!path)
 		return 1;
 
-	struct FatDirEntry entry;
+	struct FatDirEntry e;
 	U16 curClst = p.GFatType == PART_FAT32 ? p.Ebpb.Ebpb32.RootDirClst : 0;
 	U32 part = 0;
 	while (1) {
@@ -220,17 +219,20 @@ int FatFind(struct FatPart p, const char *path, struct FatDirEntry *out) {
 		if (GetPathPart(path, filename, part++, 11) != 0)
 			break;
 
-		if (FatFindInDir(p, curClst, &entry, filename) != 0)
+		if (FatFindInDir(p, curClst, &e, filename) != 0)
 			return 1;
 
-		if (entry.Attr & ARCHIVE)
+		if (e.Attr & ARCHIVE)
 			break;
 
-		curClst = entry.ClstLo;
+		curClst = e.ClstLo;
+		if (p.GFatType == PART_FAT32) {
+			curClst |= ((e.ClstHi << 16) & 0xFFF);
+		}
 	}
 
 	if (out)
-		*out = entry;
+		*out = e;
 
 	return 0;
 }
@@ -246,6 +248,11 @@ U32 FatRead(struct FatPart p, struct FatDirEntry e, U32 off, U32 n, void *d) {
 
 	U32 clstSize = p.Bpb.SctsPerClst * SCT_SIZE;
 	U32 clst = e.ClstLo;
+	clst = e.ClstLo;
+	if (p.GFatType == PART_FAT32) {
+		clst |= ((e.ClstHi << 16) & 0xFFF);
+	}
+
 
 	U32 skip = off / clstSize;
 	U32 offInClst = off % clstSize;
