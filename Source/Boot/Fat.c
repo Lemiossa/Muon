@@ -164,11 +164,11 @@ U32 FatNextClst(struct FatPart p, U32 clst) {
 // Returns non zero if have error;
 // If clst is zero and FAT is 12/16, reads in root directory;
 // TODO: LFN Support
-int FatFindInDir(struct FatPart p, U16 clst, struct FatDirEntry *out,
+int FatFindInDir(struct FatPart p, U32 clst, struct FatDirEntry *out,
 				 char *filename) {
 	if (!filename)
 		return 1;
-	U16 curClst = clst;
+	U32 curClst = clst;
 
 	if (clst == 0 && !(p.GFatType == PART_FAT12 || p.GFatType == PART_FAT16))
 		return 1;
