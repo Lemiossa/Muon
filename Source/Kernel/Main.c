@@ -8,10 +8,9 @@
 
 // The Main function don't return
 void Main(void) {
-  GdtInit();
-  PicRemap(0x20, 0x28);
-  Puts("Hello Kernel!\r\n");
+	GdtInit();
+	PicRemap(0x20, 0x28);
+	Puts("Hello Kernel!\r\n");
 
-  for (;;)
-    ;
+	for (;;);
 }

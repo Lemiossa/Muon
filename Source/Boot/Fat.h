@@ -7,44 +7,44 @@
 #include "Types.h"
 
 struct Bpb {
-  U8 Jump[3];
-  U8 OemName[8];
-  U16 BytesPerSct;
-  U8 SctsPerClst;
-  U16 ResScts;
-  U8 FatCount;
-  U16 RootDirEnts;
-  U16 TotalScts16;
-  U8 MediaDesc;
-  U16 SctsPerFat;
-  U16 SctsPerTrack;
-  U16 Heads;
-  U32 HiddenScts;
-  U32 TotalScts32;
+	U8 Jump[3];
+	U8 OemName[8];
+	U16 BytesPerSct;
+	U8 SctsPerClst;
+	U16 ResScts;
+	U8 FatCount;
+	U16 RootDirEnts;
+	U16 TotalScts16;
+	U8 MediaDesc;
+	U16 SctsPerFat;
+	U16 SctsPerTrack;
+	U16 Heads;
+	U32 HiddenScts;
+	U32 TotalScts32;
 } __attribute__((packed));
 
 struct Ebpb {
-  U8 DriveNum;
-  U8 Res;
-  U8 Sig;
-  U32 VolId;
-  U8 VolLabel[11];
-  U8 SysId[8];
+	U8 DriveNum;
+	U8 Res;
+	U8 Sig;
+	U32 VolId;
+	U8 VolLabel[11];
+	U8 SysId[8];
 } __attribute__((packed));
 
 struct FatDirEntry {
-  U8 Name[11];
-  U8 Attr;
-  U8 Res;
-  U8 Res1;
-  U16 CtdTime;
-  U16 CtdDate;
-  U16 AcsDate;
-  U16 ClstHi;
-  U16 ModTime;
-  U16 ModDate;
-  U16 ClstLo;
-  U32 FileSz;
+	U8 Name[11];
+	U8 Attr;
+	U8 Res;
+	U8 Res1;
+	U16 CtdTime;
+	U16 CtdDate;
+	U16 AcsDate;
+	U16 ClstHi;
+	U16 ModTime;
+	U16 ModDate;
+	U16 ClstLo;
+	U32 FileSz;
 } __attribute__((packed));
 
 #define READ_ONLY 0x01
@@ -55,22 +55,22 @@ struct FatDirEntry {
 #define ARCHIVE 0x20
 
 struct FatPart {
-  struct Bpb Bpb;
-  struct Ebpb Ebpb;
+	struct Bpb Bpb;
+	struct Ebpb Ebpb;
 
-  U32 StartLBA;
+	U32 StartLBA;
 
-  U32 GTotalScts;
-  U32 GFatSz;
-  U32 GRootDirScts;
-  U32 GDataScts;
+	U32 GTotalScts;
+	U32 GFatSz;
+	U32 GRootDirScts;
+	U32 GDataScts;
 
-  U32 GDataLba;
-  U32 GFatLba;
-  U32 GRootLba;
+	U32 GDataLba;
+	U32 GFatLba;
+	U32 GRootLba;
 
-  U8 GFatType;
-  U8 Drive;
+	U8 GFatType;
+	U8 Drive;
 };
 
 #define PART_INV 0

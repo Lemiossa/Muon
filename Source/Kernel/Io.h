@@ -7,13 +7,15 @@
 #include "Types.h"
 
 static inline void OutU8(U16 p, U8 b) {
-  __asm__ volatile("outb %b0, %w1" ::"a"(b), "Nd"(p) : "memory");
+	__asm__ volatile("outb %b0, %w1" ::"a"(b), "Nd"(p) : "memory");
 }
 
 static inline U8 InU8(unsigned short port) {
-  U8 ret;
-  __asm__ volatile("inb %1, %0" : "=a"(ret) : "Nd"(port));
-  return ret;
+	U8 ret;
+	__asm__ volatile("inb %1, %0" : "=a"(ret) : "Nd"(port));
+	return ret;
 }
+
+static inline void IoWait(void) { OutU8(0x80, 0); }
 
 #endif // IO_H
