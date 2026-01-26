@@ -2,15 +2,20 @@
  * Main.c
  * Created by Matheus Leme Da Silva
  */
-#include "Gdt.h"
-#include "Pic.h"
 #include "Vga.h"
+#include "Gdt.h"
+#include "Idt.h"
+#include "Pic.h"
 
 // The Main function don't return
 void Main(void) {
 	GdtInit();
+	IdtInit();
 	PicRemap(0x20, 0x28);
+
+	__asm__ volatile("sti");
 	Puts("Hello Kernel!\r\n");
+
 
 	for (;;);
 }

@@ -19,7 +19,7 @@ IMAGESIZE := 64M
 IMAGEFAT := 32
 IMAGE := $(BUILDDIR)/Quark.img
 
-QEMU_FLAGS := -drive file=$(IMAGE),if=ide,format=raw,media=disk -m 16M -serial stdio
+QEMU_FLAGS := -drive file=$(IMAGE),if=ide,format=raw,media=disk -m 1G -serial stdio
 BOOTLOADER := $(BINDIR)/Bootload.bin
 KERNEL := $(BINDIR)/Kernel.bin
 
@@ -47,7 +47,7 @@ $(IMAGE): $(BOOTLOADER) $(KERNEL) $(IMAGEROOT)
 	mkdir -p $(dir $@)
 	dd if=/dev/zero of=$@ bs=512 count=63 status=progress
 	dd if=$(BOOTLOADER) of=$@ bs=1 status=progress conv=notrunc
-	dd if=/dev/zero of=$(basename $@).p1 bs=$(IMAGESIZE) count=1 status=progress
+	truncate -s $(IMAGESIZE) $(basename $@).p1
 	$(MKFS) -F $(IMAGEFAT) -n "QUARK" $(basename $@).p1
 	mcopy -i $(basename $@).p1 -s $(IMAGEROOT)/* "::/"
 	dd if=$(basename $@).p1 >> $@
