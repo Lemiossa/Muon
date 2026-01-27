@@ -8,6 +8,7 @@
 #include "Pic.h"
 #include "E820.h"
 #include "Pmm.h"
+#include "Serial.h"
 
 struct QuarkBootInfo {
 	struct E820Entry *E820Table;
@@ -20,6 +21,7 @@ void Main(struct QuarkBootInfo *bootInfo) {
 	Clear();
 	GdtInit();
 	IdtInit();
+	SerialInit(COM1, 3);
 	PicRemap(0x20, 0x28);
 
 	E820Print(bootInfo->E820Table, bootInfo->E820EntryCnt);
