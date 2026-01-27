@@ -12,7 +12,10 @@ KERNEL_LDFLAGS := -melf_i386 -T$(SOURCEDIR)/Kernel/Kernel.ld
 KERNEL_SOURCE := \
 					Entry.asm \
 					Int.asm \
+					E820.c \
+					Pmm.c \
 					Vga.c \
+					Util.c \
 					Gdt.c \
 					Idt.c \
 					Pic.c \
