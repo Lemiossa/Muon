@@ -15,7 +15,7 @@
 // Send PIC EOI
 void PicSendEoi(U8 irq) {
 	if (irq >= 8)
-	OutU8(PIC2_COMMAND, PIC_EOI);
+		OutU8(PIC2_COMMAND, PIC_EOI);
 	OutU8(PIC1_COMMAND, PIC_EOI);
 }
 
@@ -48,4 +48,32 @@ void PicRemap(U32 off1, U32 off2) {
 
 	OutU8(PIC1_DATA, 0xFF);
 	OutU8(PIC2_DATA, 0xFF);
+}
+
+// Unmask a PIC IRQ
+void PicUnmaskIrq(U8 IRQ) {
+	if (IRQ >= 16) return;
+	U16 port = PIC1_DATA;
+
+	if (IRQ >= 8) {
+		port = PIC2_DATA;
+		IRQ -= 8;
+	}
+
+	U8 val = InU8(port) & ~(1 << IRQ);
+	OutU8(port, val);
+}
+
+// Mask a PIC IRQ
+void PicMaskIrq(U8 IRQ) {
+	if (IRQ >= 16) return;
+	U16 port = PIC1_DATA;
+
+	if (IRQ >= 8) {
+		port = PIC2_DATA;
+		IRQ -= 8;
+	}
+
+	U8 val = InU8(port) | (1 << IRQ);
+	OutU8(port, val);
 }
