@@ -11,4 +11,8 @@ void PutHexU16(U16 w);
 void PutHexU32(U32 dw);
 void PutHexU64(U64 qw);
 
+void Memcpy(void *d, const void *s, U32 n);
+void Memset(void *d, U8 b, U32 n);
+int Memcmp(const void *s1, const void *s2, U32 n);
+
 #endif // UTIL_H

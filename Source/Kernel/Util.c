@@ -32,3 +32,40 @@ void PutHexU64(U64 qw) {
 	PutHexU32(qw & 0xFFFFFFFF);
 }
 
+// Copy N bytes from S to D
+void Memcpy(void *d, const void *s, U32 n) {
+	if (n == 0 || !d || !s)
+		return;
+
+	U8 *dest = (U8 *)d;
+	U8 *src = (U8 *)s;
+	for (U32 i = 0; i < n; i++) {
+		dest[i] = src[i];
+	}
+}
+
+// Set N bytes of D with B
+void Memset(void *d, U8 b, U32 n) {
+	if (n == 0 || !d)
+		return;
+
+	U8 *dest = (U8 *)d;
+	for (U32 i = 0; i < n; i++) {
+		dest[i] = b;
+	}
+}
+
+// Compares N bytes of S1 and S2
+int Memcmp(const void *s1, const void *s2, U32 n) {
+	U8 *src1 = (U8 *)s1;
+	U8 *src2 = (U8 *)s2;
+
+	for (U32 i = 0; i < n; i++) {
+		if (src1[i] != src2[i])
+			return src1[i] < src2[i] ? -1 : 1;
+	}
+
+	return 0;
+}
+
+
