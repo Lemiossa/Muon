@@ -15,4 +15,6 @@ void Memcpy(void *d, const void *s, U32 n);
 void Memset(void *d, U8 b, U32 n);
 int Memcmp(const void *s1, const void *s2, U32 n);
 
+U8 Checksum(U8 *data, U32 len);
+
 #endif // UTIL_H

@@ -68,4 +68,11 @@ int Memcmp(const void *s1, const void *s2, U32 n) {
 	return 0;
 }
 
-
+// Create a checksum with SUM
+U8 Checksum(U8 *data, U32 len) {
+	U8 sum = 0;
+	for (U32 i = 0; i < len; i++) {
+		sum += data[i];
+	}
+	return sum;
+}
