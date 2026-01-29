@@ -4,7 +4,7 @@ MuonOS uses its own Bootloader.
 
 ## Stage 1
 MuonBootloader stage 1 is basically the MBR, it loads the second stage in sectors 1-62 in 0x8000;
-It uses the 0x42 function of the in 0x13 to load sectors.
+It uses the 0x42 function of the int 0x13 to load sectors.
 
 Access: [Bootsect.asm](https://github.com/Lemiossa/Muon/blob/main/Source/Boot/Bootsect.asm)
 
