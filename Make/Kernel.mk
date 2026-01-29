@@ -8,6 +8,7 @@ KERNEL_CFLAGS := -std=c11 -m32 -O2 \
 					-Wall -Wextra \
 					-mno-80387 -mno-mmx -mno-sse -mno-sse2 -mno-red-zone
 KERNEL_LDFLAGS := -melf_i386 -T$(SOURCEDIR)/Kernel/Kernel.ld
+LIBGCC := $(shell $(CC) $(KERNEL_CFLAGS) -print-libgcc-file-name)
 
 KERNEL_SOURCE := \
 					Entry.asm \
@@ -20,6 +21,8 @@ KERNEL_SOURCE := \
 					Gdt.c \
 					Idt.c \
 					Pic.c \
+					Pit.c \
+					Panic.c \
 					Main.c
 KERNEL_SOURCE := $(addprefix $(KERNEL_SOURCEDIR)/Kernel/,$(KERNEL_SOURCE))
 
@@ -42,7 +45,7 @@ $(KERNEL): $(KERNEL_ELF)
 
 $(KERNEL_ELF): $(KERNEL_OBJ)
 	mkdir -p $(dir $@)
-	$(LD) $(KERNEL_LDFLAGS) -o $@ $^
+	$(LD) $(KERNEL_LDFLAGS) -o $@ $^ $(LIBGCC)
 
 $(OBJDIR)/Kernel/C/%.o: $(SOURCEDIR)/Kernel/%.c
 	mkdir -p $(dir $@) $(dir $(DEPDIR)/Kernel/C/$*)

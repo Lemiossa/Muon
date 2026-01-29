@@ -17,10 +17,11 @@ OBJCOPY := i686-elf-objcopy
 
 IMAGESIZE := 64M
 IMAGEFAT := 32
-IMAGE := $(BUILDDIR)/Quark.img
+IMAGE := $(BUILDDIR)/Muon.img
 
 QEMU_FLAGS := \
 			-drive file=$(IMAGE),format=raw,if=ide,media=disk \
+			-machine pc,hpet=on \
 			-cpu pentium3 \
 			-smp 1 \
 			-vga std
@@ -59,9 +60,9 @@ $(IMAGE): $(BOOTLOADER) $(KERNEL) $(IMAGEROOT)
 
 # BOOTLOADER ==================================================================
 
-include Bootload.mk
+include Make/Bootload.mk
 
 # KERNEL ======================================================================
 
-include Kernel.mk
+include Make/Kernel.mk
 

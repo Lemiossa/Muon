@@ -11,9 +11,9 @@ _START:
 	MOV DS, AX
 	MOV ES, AX
 	MOV FS, AX
-	MOV GS, Ax
+	MOV GS, AX
 	MOV SS, AX
-	MOV SP, 0xFFFF
+	MOV SP, 0x7C00
 	STI
 
 	MOV [BootDrive], DL

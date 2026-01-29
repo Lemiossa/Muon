@@ -11,7 +11,7 @@ const char *E820TypeStrings[] = {
     "Unknown",
     "Usable RAM",
     "Reserved",
-    "ACPI Reclaimable",
+    "ACPI Rclmb",
     "ACPI NVS",
     "Bad Memory"
 };

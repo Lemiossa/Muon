@@ -20,12 +20,12 @@ U8 Mbr[512];
 struct MbrPart *PartTable = (struct MbrPart *)&Mbr[446];
 int part = 0;
 
-struct QuarkBootInfo {
+struct MuonBootInfo {
 	struct E820Entry *E820Table;
 	U8 E820EntryCnt;
 };
 
-struct QuarkBootInfo BootInfo;
+struct MuonBootInfo BootInfo;
 struct E820Entry E820Table[128];
 U8 E820EntryCnt = 0;
 
