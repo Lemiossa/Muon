@@ -4,6 +4,7 @@
  */
 #include "Io.h"
 #include "Types.h"
+#include "Serial.h"
 
 #define VGA_WIDTH 80
 #define VGA_HEIGHT 25
@@ -61,7 +62,7 @@ void Scroll(U16 n) {
 
 	for (int y = VGA_HEIGHT - n; y < VGA_HEIGHT; y++) {
 		for (int x = 0; x < VGA_WIDTH; x++) {
-			Vga[y * VGA_WIDTH + x] = 0x0720;
+			Vga[y * VGA_WIDTH + x] = (CurrentAttributes << 8) | 0x20;
 		}
 	}
 }
@@ -78,7 +79,8 @@ void Putc(char c) {
 	} else if (c == '\t') {
 		CursorX += 4;
 	} else if (c == '\b') {
-		CursorX--;
+		if (CursorX > 0)
+			CursorX--;
 	} else {
 		Putcat(CursorX, CursorY, c);
 		CursorX++;
@@ -102,4 +104,18 @@ void Putc(char c) {
 void Puts(const char *s) {
 	while (*s)
 		Putc(*s++);
+}
+
+// Clear the screen with current attributes
+void Clear(void) {
+	CursorX = 0;
+	CursorY = 0;
+	U16 pos = CursorY * VGA_WIDTH + CursorX;
+	CursorUpdate(pos);
+
+	for (U16 y = 0; y < VGA_HEIGHT; y++) {
+		for (U16 x = 0; x < VGA_WIDTH; x++) {
+			Putcat(x, y, ' ');
+		}
+	}
 }

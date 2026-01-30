@@ -69,7 +69,6 @@ void Scroll(U16 n) {
 
 // Print char C at current cursor position and move de Cursor, scrolls if needed
 void Putc(char c) {
-	SerialWrite(COM1, c);
 	U16 pos = GetCursorPos();
 	CursorY = pos / VGA_WIDTH;
 	CursorX = pos % VGA_WIDTH;
@@ -80,7 +79,8 @@ void Putc(char c) {
 	} else if (c == '\t') {
 		CursorX += 4;
 	} else if (c == '\b') {
-		CursorX--;
+		if (CursorX > 0)
+			CursorX--;
 	} else {
 		Putcat(CursorX, CursorY, c);
 		CursorX++;
