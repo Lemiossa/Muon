@@ -6,6 +6,8 @@
 #include "Idt.h"
 #include "Types.h"
 #include "Pic.h"
+#include "Panic.h"
+#include "Util.h"
 
 struct IdtEnt Idt[IDT_ENTRIES];
 struct Idtr Idtr;
@@ -33,10 +35,12 @@ const char* EXCEPTIONS[] = {
 // Handles all interrupts
 void InterruptHandler(struct IntFrame *f) {
 	if (f->IntNo <= 31) {
-		Puts("Exception!\r\n");
-		Puts(EXCEPTIONS[f->IntNo]);
-		Puts("\r\nSystem halted");
-		while (1) __asm__ volatile("cli;hlt");
+		if (f->IntNo == 14) {
+			Puts("Page Fault at ");
+			PutHexU32(f->Cr2);
+			Puts("\r\n");
+		}
+		Panic(EXCEPTIONS[f->IntNo]);
 	}
 
 	if (f->IntNo >= 32 && f->IntNo <= 47) {
