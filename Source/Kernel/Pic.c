@@ -17,20 +17,20 @@
 Irq Irqs[16];
 
 // Execute a IRQ
-void PicExecIrq(U8 IRQ, struct IntFrame *f) {
+void PICExecIrq(U8 IRQ, struct IntFrame *f) {
 	if (Irqs[IRQ])
 		Irqs[IRQ](f);
 }
 
 // Send PIC EOI
-void PicSendEoi(U8 IRQ) {
+void PICSendEoi(U8 IRQ) {
 	if (IRQ >= 8)
 		OutU8(PIC2_COMMAND, PIC_EOI);
 	OutU8(PIC1_COMMAND, PIC_EOI);
 }
 
 // Remap PIC
-void PicRemap(U32 off1, U32 off2) {
+void PICRemap(U32 off1, U32 off2) {
 	// ICW1
 	OutU8(PIC1_COMMAND, 0x11);
 	IoWait();
@@ -61,7 +61,7 @@ void PicRemap(U32 off1, U32 off2) {
 }
 
 // Unmask a PIC IRQ
-void PicUnmaskIrq(U8 IRQ) {
+void PICUnmaskIrq(U8 IRQ) {
 	if (IRQ >= 16) return;
 	U16 port = PIC1_DATA;
 
@@ -75,7 +75,7 @@ void PicUnmaskIrq(U8 IRQ) {
 }
 
 // Mask a PIC IRQ
-void PicMaskIrq(U8 IRQ) {
+void PICMaskIrq(U8 IRQ) {
 	if (IRQ >= 16) return;
 	U16 port = PIC1_DATA;
 

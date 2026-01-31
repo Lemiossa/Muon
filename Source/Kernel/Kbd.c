@@ -70,6 +70,6 @@ void KbdHandler(struct IntFrame *f) {
 // Initializes PS/2 Keyboard
 void KbdInit(void) {
 	Irqs[1] = KbdHandler;
-	PicUnmaskIrq(1);
+	PICUnmaskIrq(1);
 }
 

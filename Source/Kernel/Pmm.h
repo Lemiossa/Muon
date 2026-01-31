@@ -5,9 +5,10 @@
 #ifndef PMM_H
 #define PMM_H
 #include "Types.h"
+#include "E820.h"
 
-void PmmInit(struct E820Entry *table, U8 entries);
-void *PmmAllocPage(void);
-void PmmFreePage(void *p);
+void PMMInit(struct E820Entry *table, U8 entries);
+void *PMMAllocPage(void);
+void PMMFreePage(void *p);
 
 #endif // PMM_H

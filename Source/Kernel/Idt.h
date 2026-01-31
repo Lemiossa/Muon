@@ -6,12 +6,12 @@
 #define IDT_H
 #include "Types.h"
 
-struct Idtr {
+struct IDTr {
 	U16 Size;
 	U32 Base;
 } __attribute__((packed));
 
-struct IdtEnt {
+struct IDTEnt {
 	U16 BaseLo;
 	U16 SegSel;
 	U8 Zero;
@@ -30,10 +30,10 @@ struct IntFrame {
 } __attribute__((packed));
 
 #define IDT_ENTRIES 256
-extern struct IdtEnt Idt[IDT_ENTRIES];
-extern struct Idtr Idtr;
+extern struct IDTEnt IDT[IDT_ENTRIES];
+extern struct IDTr IDTr;
 
-void IdtSetGate(U8 gate, void *isr, U16 segSel, U8 attr);
-void IdtInit(void);
+void IDTSetGate(U8 gate, void *isr, U16 segSel, U8 attr);
+void IDTInit(void);
 
 #endif // IDT_H

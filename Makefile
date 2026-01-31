@@ -21,10 +21,12 @@ IMAGE := $(BUILDDIR)/Muon.img
 
 QEMU_FLAGS := \
 			-drive file=$(IMAGE),format=raw,if=ide,media=disk \
-			-machine pc,hpet=on \
+			-audiodev pa,id=snd0 \
+			-machine pc,hpet=on,pcspk-audiodev=snd0 \
 			-cpu pentium3 \
 			-smp 1 \
 			-vga std
+
 BOOTLOADER := $(BINDIR)/Bootload.bin
 KERNEL := $(BINDIR)/Kernel.bin
 

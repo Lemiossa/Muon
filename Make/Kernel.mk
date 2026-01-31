@@ -4,7 +4,7 @@
 KERNEL_ELF := $(basename $(KERNEL)).elf
 
 KERNEL_CFLAGS := -std=c11 -m32 -O2 \
-					-ffreestanding -fno-stack-protector \
+					-ffreestanding -fno-stack-protector -fexec-charset=CP437 \
 					-Wall -Wextra \
 					-mno-80387 -mno-mmx -mno-sse -mno-sse2 -mno-red-zone
 KERNEL_LDFLAGS := -melf_i386 -T$(SOURCEDIR)/Kernel/Kernel.ld

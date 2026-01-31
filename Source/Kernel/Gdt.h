@@ -6,12 +6,12 @@
 #define GDT_H
 #include "Types.h"
 
-struct Gdtr {
+struct GDTr {
 	U16 Size;
 	U32 Base;
 } __attribute__((packed));
 
-struct GdtEnt {
+struct GDTEnt {
 	U16 LimitLo;
 	U16 BaseLo;
 	U8 BaseMi;
@@ -21,10 +21,10 @@ struct GdtEnt {
 } __attribute__((packed));
 
 #define GDT_ENTRIES 3
-extern struct GdtEnt Gdt[GDT_ENTRIES];
-extern struct Gdtr Gdtr;
+extern struct GDTEnt GDT[GDT_ENTRIES];
+extern struct GDTr GDTr;
 
-void GdtSetEnt(U16 ent, U32 limit, U32 base, U8 access, U8 flags);
-void GdtInit(void);
+void GDTSetEnt(U16 ent, U32 limit, U32 base, U8 access, U8 flags);
+void GDTInit(void);
 
 #endif // GDT_H

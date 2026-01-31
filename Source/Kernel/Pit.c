@@ -7,22 +7,32 @@
 #include "Io.h"
 #include "Pit.h"
 
-#define PITBASEFREQ 1193182
-
 U64 Ticks = 0;
 
-void PitHandler(struct IntFrame *f) {
+// PIT handler
+void PITHandler(struct IntFrame *f) {
 	(void)f;
 	Ticks++;
 }
 
-void PitInit(U16 freq) {
+// Sets PIT frequency
+void PITSetFreq(U16 freq, U8 PIT) {
 	if (freq == 0) return;
+	if (PIT > 2) return;
 	U16 divisor = PITBASEFREQ/freq;
 	OutU8(0x43, 0b00110100);
-	OutU8(0x40, divisor & 0xFF); // Low byte
-	OutU8(0x40, (divisor >> 8) & 0xFF); // High byte
-	PicUnmaskIrq(0);
-	Irqs[0] = PitHandler;
+	OutU8(0x40 + PIT, divisor & 0xFF); // Low byte
+	OutU8(0x40 + PIT, (divisor >> 8) & 0xFF); // High byte
 }
 
+// Initializes PIT with a custom frequency
+void PITInit(U16 freq) {
+	PITSetFreq(freq, PIT0);
+	Irqs[0] = PITHandler;
+	PICUnmaskIrq(0);
+}
+
+// Returns Timer TICKS
+U64 PITGetTicks(void) {
+	return Ticks;
+}
